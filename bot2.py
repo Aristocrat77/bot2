@@ -29,15 +29,4 @@ def age_handler(pm, v):
         bot.send_message(pm.chat.id, 'Вы ввели некорректное число!')
 
 
-# def height_handler(message, weight):
-#     try:
-#         height = message.text
-#         bot.send_message(message.chat.id, f"Your name is {weight}, and your age is {height}.")
-#     except ValueError:
-#         bot.send_message(message.chat.id, 'Вы ввели некорректное число!')
-
-
-
-
-
 bot.polling(none_stop=True, interval=0)
