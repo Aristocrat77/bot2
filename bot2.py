@@ -1,29 +1,43 @@
 import telebot
+from telebot.types import InlineKeyboardMarkup
 
-botTimeWeb = telebot.TeleBot('7721748157:AAH5NlI6XHxw2U5pJDywdlES1H41R9bF6J0')
+bot = telebot.TeleBot('7721748157:AAH5NlI6XHxw2U5pJDywdlES1H41R9bF6J0')
 
 from telebot import types
 
 
-@botTimeWeb.message_handler(commands=['start'])
-def startBot(message):
-  first_mess = f"<b>{message.from_user.first_name} {message.from_user.last_name}</b>, привет!"
-  markup = types.InlineKeyboardMarkup()
-  button_yes = types.InlineKeyboardButton(text = 'Да', callback_data='yes')
-  markup.add(button_yes)
-  botTimeWeb.send_message(message.chat.id, first_mess, parse_mode='html', reply_markup=markup)
+@bot.message_handler(content_types=['text'])
+def welcome(pm):
+    sent_msg = bot.send_message(pm.chat.id, "Чтобы узнать БЖУ введите свой вес")
+    bot.register_next_step_handler(sent_msg, v_handler)
 
 
-@botTimeWeb.callback_query_handler(func=lambda call:True)
-def response(function_call):
-    if function_call.message:
-        if function_call.data == "yes":
-            second_mess = "Мы облачная платформа для разработчиков и бизнеса. Более детально можешь ознакомиться с нами на нашем сайте!"
-            markup = types.InlineKeyboardMarkup()
-            markup.add(types.InlineKeyboardButton("Перейти на сайт", url="https://timeweb.cloud/"))
-            botTimeWeb.send_message(function_call.message.chat.id, second_mess, reply_markup=markup)
-            botTimeWeb.answer_callback_query(function_call.id)
+def v_handler(pm):
+    try:
+        v = int(pm.text)
+        sent_msg = bot.send_message(pm.chat.id, f"Ваш вес {v}. Теперь введите свой рост")
+        bot.register_next_step_handler(sent_msg, age_handler, v)
+    except ValueError:
+        bot.send_message(pm.chat.id, 'Вы ввели некорректное число!')
+
+
+def age_handler(pm, v):
+    try:
+        age = int(pm.text)
+        bot.send_message(pm.chat.id, f"Ваш вес {v}, ваш рост {age}.")
+    except ValueError:
+        bot.send_message(pm.chat.id, 'Вы ввели некорректное число!')
+
+
+# def height_handler(message, weight):
+#     try:
+#         height = message.text
+#         bot.send_message(message.chat.id, f"Your name is {weight}, and your age is {height}.")
+#     except ValueError:
+#         bot.send_message(message.chat.id, 'Вы ввели некорректное число!')
 
 
 
-botTimeWeb.infinity_polling()
+
+
+bot.polling(none_stop=True, interval=0)
