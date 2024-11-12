@@ -56,7 +56,7 @@ def age_handler(pm, q):
     try:
         age = int(pm.text)
         bot.send_message(pm.chat.id, f"Ваш возраст {age}.")
-        bot.send_message(pm.chat.id, f"тут посчитаю ")
+        bot.send_message(pm.chat.id, f" ????7 ")
         print(age)
     except ValueError:
         bot.send_message(pm.chat.id, 'Вы ввели некорректное число!')
