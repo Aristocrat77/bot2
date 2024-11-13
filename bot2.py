@@ -32,6 +32,7 @@ def callback_inline(call, self=None):
     except Exception as e:
         print(repr(e))
 
+
 def v_handler(pm):
     try:
         v = int(pm.text)
@@ -56,12 +57,10 @@ def age_handler(pm, q):
     try:
         age = int(pm.text)
         bot.send_message(pm.chat.id, f"Ваш возраст {age}.")
-        bot.send_message(pm.chat.id, f" ????7 ")
+        bot.send_message(pm.chat.id, f" жопа ")
         print(age)
     except ValueError:
         bot.send_message(pm.chat.id, 'Вы ввели некорректное число!')
-
-
 
 
 bot.polling(none_stop=True, interval=0)
