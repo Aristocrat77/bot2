@@ -11,16 +11,16 @@ def start(message):
     main.start(message)
 
 
-
 class Main:
-    def __init__ (self, bot):
+    def __init__(self, bot):
+        self.age = None
         self.height = None
         self.weight = None
         self.bot = bot
         print('Main started')
 
     def start(self, message):
-        raw_height = self.bot.send_message(message.chat.id, 'привет я бот! Введи рост.')
+        raw_height = self.bot.send_message(message.chat.id, 'Привет писька! Введи свой рост.')
         self.bot.register_next_step_handler(raw_height, self.height_handler)
 
     def height_handler(self, message):
@@ -28,7 +28,7 @@ class Main:
             height = int(message.text)
             self.height = height
 
-            raw_weight = self.bot.send_message(message.chat.id, f"Ваш рост {height}. Теперь введите свой вес")
+            raw_weight = self.bot.send_message(message.chat.id, f"Теперь введи свой вес")
             self.bot.register_next_step_handler(raw_weight, self.weight_handler)
         except ValueError:
             self.bot.send_message(message.chat.id, 'Вы ввели некорректное число!')
@@ -37,7 +37,7 @@ class Main:
         try:
             weight = int(message.text)
             self.weight = weight
-            raw_age = self.bot.send_message(message.chat.id, f"Ваш вес {weight}. Введите возраст")
+            raw_age = self.bot.send_message(message.chat.id, f"Твой возраст")
             self.bot.register_next_step_handler(raw_age, self.age_handler)
         except ValueError:
             self.bot.send_message(message.chat.id, 'Вы ввели некорректное число!')
@@ -45,12 +45,11 @@ class Main:
     def age_handler(self, message):
         try:
             age = int(message.text)
-            self.bot.send_message(message.chat.id, f"Ваш возраст {age}, {self.height}, {self.weight} .")
+            self.age = age
+            self.bot.send_message(message.chat.id,
+                                  f"Твоя суточная норма калорий для набора массы {round((((10 * (float(self.weight))) + (6.25 * (float(self.height))) - (5 * (float(self.age))) - 161) * 1.55) + 250, None)}")
         except ValueError:
             self.bot.send_message(message.chat.id, 'Вы ввели некорректное число!')
 
 
 bot.polling(none_stop=True, interval=0)
-
-
-
